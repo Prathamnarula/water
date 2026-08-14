@@ -2,6 +2,10 @@
 # ═══════════════════════════════════════════════════════════════
 #  💧 Water Reminder PWA — Single Setup Script
 #  Works on: macOS, Linux, WSL, Git Bash (Windows)
+#
+#  Usage:
+#    Option A (from GitHub):  bash setup.sh
+#    Option B (manual push):  cd water && bash setup.sh
 # ═══════════════════════════════════════════════════════════════
 
 set -euo pipefail
@@ -58,6 +62,12 @@ install_or_check_bun() {
 clone_repo() {
   echo ""
   info "Setting up project..."
+
+  # If we're already inside the water project dir, skip cloning
+  if [ -f "package.json" ] && [ -d "src" ]; then
+    success "Already inside the project directory. Skipping clone."
+    return
+  fi
 
   if [ -d "$CLONE_DIR" ]; then
     if [ -d "$CLONE_DIR/.git" ]; then
