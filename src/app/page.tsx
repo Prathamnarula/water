@@ -1,31 +1,30 @@
-'use client'
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import { WaterDashboard } from '@/components/water-dashboard';
+import { SettingsPanel } from '@/components/settings-panel';
+import { useWaterStore } from '@/lib/water-store';
+
+export default function HomePage() {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const { settings } = useWaterStore();
+
+  // Apply dark mode on mount
+  useEffect(() => {
+    if (settings.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [settings.darkMode]);
+
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      gap: '2rem',
-      padding: '1rem'
-    }}>
-      <div style={{
-        position: 'relative',
-        width: '6rem',
-        height: '6rem'
-      }}>
-        <img
-          src="/logo.svg"
-          alt="Z.ai Logo"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'contain'
-          }}
-        />
-      </div>
-    </div>
-  )
+    <>
+      <WaterDashboard onOpenSettings={() => setSettingsOpen(true)} />
+      <SettingsPanel
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+      />
+    </>
+  );
 }
